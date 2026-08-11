@@ -1,0 +1,37 @@
+:root {
+
+    --libre: flex;
+
+}
+*{
+    box-sizing: border-box;
+}
+
+
+#contenedor-padre{
+    display: var(--libre);
+    flex-direction: column;
+    height: 100vh;
+    width: 100wh;
+
+}
+
+#encabezado{
+    flex-wrap: wrap;
+    width: 100%;
+    border:1px solid;
+    height: 7%;
+    padding: 10px;
+    font-size:x-large;
+}
+#panel-menu{
+    height: 20px;
+    border: 1px solid;
+    height: 12%;
+    width: 100%;
+}
+#cuerpo{
+    border: 1px solid;
+    height: 81%;
+    width: 100%;
+}
