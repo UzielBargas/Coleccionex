@@ -5,13 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coleccionex</title>
     <link rel="stylesheet" href="css/Estilos.css">
+    
 </head>
 <body>
     <div id="contenedor-padre">
         <div id="encabezado">Coleccionex</div>
-        <div id="panel-menu">panel</div>
+        <div id="panel-menu">
+            <nav class="menu">
+
+                    <button class="nav-btn" data-target="perfil"> Mi perfil  
+                    </button>
+
+                
+                    <button class="nav-btn" data-target="cartas"> Mi perfil  
+                    </button>
+               
+                    <button class="nav-btn" data-target="mercado"> Mi perfil  
+                    </button>
+
+                
+                    <button class="nav-btn" data-target="historial-transacciones"> Mi perfil  
+                    </button>
+             
+                
+
+            </nav>
+            <main class="contenido">
+                <section id="perfil" class="seccion">
+
+                </section>
+
+                <section id="cartas" class="seccion"> 
+                </section>
+
+                <section id="mercado" class="seccion activa">
+
+                </section>
+
+                <section id="historial-transacciones" class="seccion">
+                    
+                </section>
+
+            </main>
+        </div>
         <div id="cuerpo">Vista de los paneles</div>
     
     </div>
+
+    <script src="java/funciones.js"></script>
 </body>
 </html>
