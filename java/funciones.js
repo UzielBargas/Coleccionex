@@ -24,3 +24,6 @@ botones.forEach(btn => {
     });
 
 });
+function abrirLogin() {
+    document.getElementById('login-modal').style.display = 'flex';
+}
