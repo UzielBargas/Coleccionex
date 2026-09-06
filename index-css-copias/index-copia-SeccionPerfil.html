@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coleccionex</title>
-    <link rel="stylesheet" href="css/Estilos.css">
+    <link rel="stylesheet" href="Estilos-copia.css">
     
 </head>
 <body>
     <div id="contenedor-padre">
         <div id="encabezado">
-            <img src="imagenes/imagen_logo.jpg">
-            <a class="acceso-usuario" href="paginas/sesion.html">Iniciar sesión</a>
+            <img src="../imagenes/imagen_logo.jpg">
         </div>
         <div id="panel-menu">
             <div id="texto-panel">
@@ -30,6 +29,11 @@
                     </button>
 
                 
+                    <button class="nav-btn" data-target="historial-transacciones"> Historial de transacciones  
+                    </button>
+             
+                
+
             </nav>
            
                 
@@ -63,11 +67,11 @@
                     holo2
                 </section>
 
+                <section id="historial-transacciones" class="seccion">
+                    holo3
+                </section>
         </div>
-        <footer id="pie">
-            <a href="paginas/sobre-nosotros.html">Sobre nosotros</a>
-            <a href="paginas/historial.html">Historial de transacciones</a>
-        </footer>
+    
     </div>
     <div id="overlay">
 <div class="login">
@@ -83,6 +87,6 @@
 </div>
     </div>
 
-    <script src="java/funciones.js"></script>
+    <script src="../java/funciones.js"></script>
 </body>
 </html>
