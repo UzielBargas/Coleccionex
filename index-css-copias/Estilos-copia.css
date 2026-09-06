@@ -4,7 +4,7 @@
 
 }
 *{
-    box-sizing: border-box; /* hace que padding se cuenten dentro del width y height */
+    box-sizing: border-box;
 }
 
 
@@ -17,8 +17,11 @@
 
 }
 
-#encabezado{
-    
+#encabezado{ /* SUB DIV hijo 1*/
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
     width: 100%;
    
     height: 9%;
@@ -30,7 +33,19 @@
     width: 15%;
     height: 100%;
 }
-#panel-menu{
+.acceso-usuario {
+    margin-right: 25px;
+    padding: 10px 15px;
+    border-radius: 4px;
+    background-color: rgb(230, 126, 34);
+    color: white;
+    text-decoration: none;
+    font-size: medium;
+}
+.acceso-usuario:hover {
+    background-color: rgb(194, 92, 18);
+}
+#panel-menu{/* SUB DIV hijo 2*/ 
     
     
     height: 12%;
@@ -39,25 +54,43 @@
   
 
 }
-#cuerpo{
+#cuerpo{ /* SUB DIV hijo 3*/
     
-    height: 79%;
+    height: 69%;
     width: 100%;
     background-image: url(../imagenes/imagen-fondo-seccionCUERPO2.jpg);
 }
 
+#pie {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10%;
+    background-color: rgb(24, 42, 62);
+}
+
+#pie a {
+    margin: 0 10px;
+    color: white;
+    text-decoration: none;
+}
+
+#pie a:hover {
+    color: orange;
+}
+
 .seccion {
     display: none;
-    position: relative;
     padding: 28px;
     border-radius: 22px;
     background: rgba(13,22,40,.78);
     border: 1px solid rgba(168,85,247,.28);
     box-shadow:
-        0 0 26px rgba(168,85,247,.10),
-        inset 0 0 18px rgba(122,215,255,.05);
+        0 0 26px rgba(168,85,247,.10);
     animation: fade .25s ease;
     width: 100%;
+    height: 100%;
+    
 }
 
 .seccion.activa {
@@ -70,31 +103,27 @@
 }
 .nav-btn{
     background-color: rgb(37, 46, 55);
-    border:none;
+    border: 1px;
     border-radius: 2.5px;
-    width: 25%;
+    width: 33.33%;
     height: 100%;
     color: whitesmoke;
     font-size: larger;
-    font-family:'Courier New';
-    transition: all 0.3s ease;
+    font-family:monospace;
     position:relative;
+    transition: all 0.3s ease;
     
 }
 .nav-btn:hover{
   color: orange;
   text-shadow: 0 0 10px orange;
-  font-weight: bold;
-  
-  
+ 
 }
 .nav-btn:focus{
   color: orange;
   text-shadow: 0 0 10px orange;
-  font-weight: bold;
   
 }
-
 .nav-btn::after {
     content: "";                  /* crea la línea */
     position: absolute;           /* permite posicionarla */
@@ -116,11 +145,16 @@
     font-size:larger;
     padding: 1%;
 }
+
+
+
+/* Seccion Mis cartas / mazos CSS */
 #estilos-cartas{
     height: 100%;
     width: 100%;
     display: grid;
-    
+
+
 
     grid-template-columns: 25% 60% 15%;
 
@@ -132,23 +166,24 @@
     
 }
 #mazos{
-    border: 1px solid;
+    border: 1px ;
     border-radius: 5px;
     grid-row: 1/4;  /* EL GRID, CUENTA LAS LINEAS HORIZONTALES O VERTICALES, en este caso habrian 5 lineas en total*/
     grid-column: 1/2;
     background-color: rgb(220, 220, 220);
+    overflow-y: auto; /* esto permite desplazamiento vertical si supera el limite de la caja que esta fija / Scroll interno*/
     
 }
 
 #detalles-mazo{
-    border: 1px solid;
+    border: 1px ;
     grid-column: 2/4;
     grid-row: 1/2;
     background-color: rgb(220, 220, 220);
     border-radius: 5px;
 }
 #historial-cartas{
-    border: 1px solid;
+    border: 1px ;
     grid-column: 2/3;
     grid-row: 2/4;
     background-color: rgb(220, 220, 220);
@@ -156,7 +191,7 @@
     
 }
 #cartas-sin-mazo{
-    border: 1px solid;
+    border: 1px ;
     border-radius: 5px;
     grid-column: 3/4;
     grid-row: 2/4;
@@ -177,3 +212,15 @@
     align-items: center;
 
 }
+#texto-titulo{
+    border-bottom: 1px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background-color: rgb(38, 62, 86);
+    padding: 10px;
+    color: whitesmoke;
+    font-family:monospace;
+    font-size: larger;
+}
+
+/* FIN seccion CSS Mis cartas / mazos*/
