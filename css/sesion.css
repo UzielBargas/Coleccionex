@@ -1,0 +1,85 @@
+* {
+	box-sizing: border-box;
+}
+body {
+	margin: 0;
+	min-height: 100vh;
+	background-color: rgb(24, 42, 62);
+	background-image: url(../imagenes/imagen-fondo-seccionCUERPO2.jpg);
+	background-size: cover;
+	background-position: center;
+	color: white;
+	font-family: Arial, sans-serif;
+}
+.encabezado {
+	height: 90px;
+	padding: 15px 30px;
+	background-color: rgb(24, 42, 62);
+}
+.logo {
+	width: 190px;
+	height: 60px;
+	object-fit: contain;
+}
+.contenido {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: calc(100vh - 90px);
+	padding: 30px 15px;
+	background-color: rgba(10, 20, 32, 0.55);
+}
+.caja-login {
+	width: 100%;
+	max-width: 390px;
+	padding: 35px;
+	background-color: rgba(24, 42, 62, 0.95);
+	border: 2px solid rgb(230, 126, 34);
+	border-radius: 8px;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+	text-align: center;
+}
+h1 {
+	margin: 0 0 10px;
+	color: rgb(255, 166, 60);
+}
+.caja-login p {
+	margin-top: 0;
+	color: rgb(220, 220, 220);
+}
+form {
+	margin-top: 25px;
+	text-align: left;
+}
+label {
+	display: block;
+	margin: 15px 0 6px;
+}
+input {
+	width: 100%;
+	padding: 11px;
+	border: 1px solid rgb(160, 160, 160);
+	border-radius: 4px;
+	font-size: 15px;
+}
+button {
+	width: 100%;
+	margin: 25px 0 15px;
+	padding: 12px;
+	border: 0;
+	border-radius: 4px;
+	background-color: rgb(230, 126, 34);
+	color: white;
+	font-size: 16px;
+	cursor: pointer;
+}
+button:hover {
+	background-color: rgb(194, 92, 18);
+}
+a {
+	color: rgb(255, 166, 60);
+}
+.registro {
+	margin-top: 25px;
+	font-size: 14px;
+}

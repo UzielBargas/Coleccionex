@@ -18,6 +18,9 @@
 }
 
 #encabezado{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     flex-wrap: wrap;
     width: 100%;
    
@@ -30,6 +33,18 @@
     width: 15%;
     height: 100%;
 }
+.acceso-usuario {
+    margin-right: 25px;
+    padding: 10px 15px;
+    border-radius: 4px;
+    background-color: rgb(230, 126, 34);
+    color: white;
+    text-decoration: none;
+    font-size: medium;
+}
+.acceso-usuario:hover {
+    background-color: rgb(194, 92, 18);
+}
 #panel-menu{
     
     
@@ -41,9 +56,27 @@
 }
 #cuerpo{
     
-    height: 79%;
+    height: 69%;
     width: 100%;
     background-image: url(../imagenes/imagen-fondo-seccionCUERPO2.jpg);
+}
+
+#pie {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10%;
+    background-color: rgb(24, 42, 62);
+}
+
+#pie a {
+    margin: 0 10px;
+    color: white;
+    text-decoration: none;
+}
+
+#pie a:hover {
+    color: orange;
 }
 
 .seccion {
@@ -73,7 +106,7 @@
     background-color: rgb(37, 46, 55);
     border: 1px;
     border-radius: 2.5px;
-    width: 25%;
+    width: 33.33%;
     height: 100%;
     color: whitesmoke;
     font-size: larger;

@@ -1,10 +1,30 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coleccionex</title>
-    <link rel="stylesheet" href="../css/Estilos.css">    
+   <link rel="stylesheet" href="../css/sesion.css">
  </head>
  <body>
- <img src="../img/logo.png" alt="Logo de Coleccionex" class="logo">
-    
+   <header class="encabezado">
+      <a href="../index.html">
+         <img src="../imagenes/imagen_logo.png" alt="Logo de Coleccionex" class="logo">
+      </a>
+   </header>
+   <main class="contenido">
+      <section class="caja-login">
+         <h1>Iniciar sesion</h1>
+         <p>Entra a tu coleccion de cartas</p>
+         <form action="#" method="post">
+            <label for="usuario">Usuario</label>
+            <input type="text" id="usuario" name="usuario" placeholder="Escribe tu usuario" required>
+            <label for="contrasena">Contraseña</label>
+            <input type="password" id="contrasena" name="contrasena" placeholder="Escribe tu contraseña" required>
+            <button type="submit">Entrar</button>
+         </form>
+         <a href="#">¿olvidaste tu contraseña?</a>
+         <p class="registro">¿No tenes una cuenta? <a href="registro.html">Registrate</a></p>
+      </section>
+   </main>
+ </body>
