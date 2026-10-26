@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coleccionex</title>
+    <!-- Tipografia unica de la pagina (titulos) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/Estilos.css">
+
+</head>
+<!-- La clase del body cambia a "cliente" o "visitante" segun haya sesion (lo hace app.js) -->
+<body class="visitante">
+    <div id="contenedor-padre">
+        <div id="encabezado">
+            <img src="imagenes/imagen_logo.jpg" alt="Logo de Coleccionex">
+            <div class="encabezado-derecha">
+                <!-- Visitante -->
+                <a class="acceso-usuario acceso-secundario solo-visitante" href="paginas/registro.html">Registrarse</a>
+                <a class="acceso-usuario solo-visitante" href="paginas/sesion.html">Iniciar sesión</a>
+                <!-- Cliente: saldo en pesos (al tocarlo lleva a cargar saldo) -->
+                <button type="button" class="chip-saldo solo-cliente" id="btn-saldo" title="Cargar saldo">
+                    <small>Tu saldo</small>
+                    <strong id="saldo">$ 0,00</strong>
+                </button>
+                <button type="button" class="acceso-usuario solo-cliente" id="btn-salir">Cerrar sesión</button>
+            </div>
+        </div>
+        <div id="panel-menu">
+            <div id="texto-panel">
+                <span class="solo-cliente">PANEL DE CLIENTE - BIENVENIDO <span id="saludo">USUARIO</span></span>
+                <span class="solo-visitante">BIENVENIDO A COLECCIONEX - COMPRÁ, VENDÉ Y ORGANIZÁ TUS CARTAS</span>
+            </div>
+            <nav id="menu">
+                    <button class="nav-btn activo" data-target="inicio"> Inicio
+                    </button>
+
+                    <button class="nav-btn solo-cliente" data-target="perfil"> Mi perfil
+                    </button>
+
+                    <button class="nav-btn solo-cliente" data-target="cartas"> Mis cartas / mazos
+                    </button>
+
+                    <button class="nav-btn" data-target="mercado"> Mercado
+                    </button>
+
+                    <button class="nav-btn solo-cliente" data-target="historial"> Historial
+                    </button>
+            </nav>
+        </div>
+        <div id="cuerpo">
+
+            <!-- ================= INICIO ================= -->
+            <section id="inicio" class="seccion activa">
+                <!-- Aviso si no se puede hablar con PHP (por ejemplo, si se abrio con doble clic) -->
+                <div class="aviso-error" id="aviso-conexion" hidden></div>
+
+                <!-- Aviso para completar el perfil antes de comprar -->
+                <div class="aviso" id="aviso-perfil" hidden>
+                    <span>Completá tu <strong>nombre y teléfono</strong> en Mi perfil para poder comprar y cargar saldo.</span>
+                    <button type="button" class="boton" data-ir="perfil">Completar perfil</button>
+                </div>
+
+                <!-- Portada: visitante -->
+                <div class="portada solo-visitante">
+                    <div>
+                        <h2>Comprá y vendé cartas <span>coleccionables</span></h2>
+                        <p>Yu-Gi-Oh!, Pokémon, Magic y figuritas de fútbol. Publicá las tuyas con fotos y su estado real,
+                            armá tus mazos y pagá en pesos con tu saldo.</p>
+                        <div class="botones-portada">
+                            <a class="boton boton-grande" href="paginas/registro.html">Crear cuenta gratis</a>
+                            <button type="button" class="boton boton-grande boton-secundario" data-ir="mercado">Ver el Mercado</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portada: cliente -->
+                <div class="portada solo-cliente">
+                    <div>
+                        <h2 id="titulo-bienvenida">¡Hola!</h2>
+                        <p id="resumen-bienvenida">Cargando…</p>
+                    </div>
+                    <div class="saldo-grande">
+                        <small>Saldo disponible</small>
+                        <strong id="saldo-inicio">$ 0,00</strong>
+                    </div>
+                </div>
+
+                <!-- Buscador: lleva al Mercado con lo que se escribió -->
+                <form class="buscador" id="buscador-inicio">
+                    <input type="search" name="q" placeholder="Buscá una carta o colección: Charizard, Mago Oscuro, Messi…">
+                    <button type="submit" class="boton boton-grande">Buscar</button>
+                </form>
+
+                <!-- Accesos rapidos (solo cliente) -->
+                <div class="solo-cliente">
+                    <h3 class="subtitulo-caja">¿Qué querés hacer?</h3>
+                    <div class="accesos">
+                        <button type="button" class="acceso btn-publicar">
+                            <span class="icono-acceso">+</span>
+                            <strong>Publicar carta</strong>
+                            <span>Subí una foto y ponela a la venta</span>
+                        </button>
+                        <button type="button" class="acceso" data-ir="mercado">
+                            <span class="icono-acceso">$</span>
+                            <strong>Comprar</strong>
+                            <span>Buscá en el Mercado</span>
+                        </button>
+                        <button type="button" class="acceso" id="acceso-saldo">
+                            <span class="icono-acceso">↑</span>
+                            <strong>Cargar saldo</strong>
+                            <span>Mercado Pago, Ualá o Naranja X</span>
+                        </button>
+                        <button type="button" class="acceso" data-ir="cartas">
+                            <span class="icono-acceso">▦</span>
+                            <strong>Mis mazos</strong>
+                            <span>Organizá tu inventario</span>
+                        </button>
+                    </div>
+                </div>
+
+                <h3 class="subtitulo-caja">Explorá por juego</h3>
+                <div class="juegos" id="lista-juegos"></div>
+
+                <h3 class="subtitulo-caja">Últimas publicaciones <button type="button" class="enlace boton-texto" data-ir="mercado">Ver todo →</button></h3>
+                <div class="box" id="lista-ultimas"></div>
+
+                <div class="dos-columnas">
+                    <div>
+                        <h3 class="subtitulo-caja">Lo que hacemos</h3>
+                        <div class="caja-oscura">
+                            <ul class="lista-ventajas">
+                                <li>Cada publicación tiene foto, estado, año, colección, medidas y peso.</li>
+                                <li>Pagás con tu saldo en pesos: lo cargás con la billetera que uses.</li>
+                                <li>El vendedor recibe el pago al instante (menos 5% de comisión).</li>
+                                <li>Si algo no coincide con lo publicado, podés reportar al vendedor.</li>
+                                <li>Todas tus compras y ventas quedan en tu historial.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="subtitulo-caja">Preguntas frecuentes</h3>
+                        <div class="caja-oscura faq">
+                            <details>
+                                <summary>¿Cómo vendo una carta?</summary>
+                                <p>Creá tu cuenta, tocá "Publicar carta", subí una foto y completá estado, año, colección, medidas, peso y precio.</p>
+                            </details>
+                            <details>
+                                <summary>¿Cómo pago?</summary>
+                                <p>Con el saldo de tu cuenta. Lo cargás desde Mi perfil con Mercado Pago, Ualá o Naranja X.</p>
+                            </details>
+                            <details>
+                                <summary>¿Qué significa cada estado?</summary>
+                                <p>Nuevo: sin uso. Casi nuevo: impecable, quizás sacada del sobre. Muy bueno y Bueno: detalles mínimos o leves.
+                                    Usado: marcas de juego visibles. Dañado: dobleces o roturas.</p>
+                            </details>
+                            <details>
+                                <summary>¿Qué pasa si la carta no está como decía?</summary>
+                                <p>Desde el detalle de la carta podés reportar al vendedor. Un administrador revisa el caso y puede suspender la cuenta.</p>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= MI PERFIL ================= -->
+            <section id="perfil" class="seccion">
+                <div class="perfil-grilla">
+                    <div class="perfil-columna">
+                        <div class="caja-oscura">
+                            <div class="perfil-cabecera">
+                                <div class="avatar" id="perfil-avatar">?</div>
+                                <div>
+                                    <h2 id="perfil-nombre">Mi perfil</h2>
+                                    <p class="pista" id="perfil-usuario"></p>
+                                    <p class="perfil-descripcion" id="perfil-descripcion"></p>
+                                </div>
+                                <button type="button" class="boton boton-secundario" id="btn-editar-perfil">Editar perfil</button>
+                            </div>
+                            <div class="perfil-datos">
+                                <div class="dato"><strong id="dato-cartas">0</strong>cartas en inventario</div>
+                                <div class="dato"><strong id="dato-venta">0</strong>publicadas</div>
+                                <div class="dato"><strong id="dato-ventas">0</strong>ventas realizadas</div>
+                                <div class="dato"><strong id="dato-compras">0</strong>compras</div>
+                            </div>
+
+                            <!-- Editar perfil (se muestra al tocar "Editar perfil") -->
+                            <form class="form-perfil" id="form-perfil" hidden>
+                                <div class="grilla-campos">
+                                    <label class="campo"><span>Nombre <span class="obligatorio">*</span></span>
+                                        <input type="text" name="nombre" maxlength="80" required autocomplete="given-name"></label>
+                                    <label class="campo"><span>Apellido (opcional)</span>
+                                        <input type="text" name="apellido" maxlength="80" autocomplete="family-name"></label>
+                                    <label class="campo"><span>Teléfono <span class="obligatorio">*</span></span>
+                                        <input type="tel" name="telefono" maxlength="30" required placeholder="299 400-1122" autocomplete="tel"></label>
+                                    <label class="campo"><span>Correo <span class="obligatorio">*</span></span>
+                                        <input type="email" name="correo" required autocomplete="email"></label>
+                                    <label class="campo ancho-total"><span>Sobre mí (opcional)</span>
+                                        <textarea name="descripcion" maxlength="300" placeholder="Contá qué coleccionás…"></textarea></label>
+                                </div>
+                                <div class="acciones-form">
+                                    <button type="submit" class="boton boton-grande">Guardar cambios</button>
+                                    <button type="button" class="boton boton-grande boton-secundario" id="btn-cancelar-perfil">Cancelar</button>
+                                </div>
+                                <p class="mensaje" id="mensaje-perfil"></p>
+                            </form>
+                        </div>
+
+                        <div class="caja-oscura">
+                            <h3 class="subtitulo-caja" style="margin-top:0">Últimas actividades
+                                <button type="button" class="enlace boton-texto" data-ir="historial">Ver todo →</button></h3>
+                            <ul class="lista-movimientos" id="lista-actividades"></ul>
+                        </div>
+                    </div>
+
+                    <!-- Cargar saldo -->
+                    <div class="caja-oscura" id="caja-saldo">
+                        <h3 class="subtitulo-caja" style="margin-top:0">Cargar saldo</h3>
+                        <p class="pista">Saldo actual</p>
+                        <div class="precio-grande" id="saldo-perfil">$ 0,00</div>
+                        <form id="form-saldo">
+                            <p class="pista">Método de pago</p>
+                            <div class="metodos">
+                                <label class="metodo"><input type="radio" name="metodo" value="Mercado Pago" checked><span>Mercado Pago</span></label>
+                                <label class="metodo"><input type="radio" name="metodo" value="Ualá"><span>Ualá</span></label>
+                                <label class="metodo"><input type="radio" name="metodo" value="Naranja X"><span>Naranja X</span></label>
+                            </div>
+                            <label class="campo"><span>Monto en pesos</span>
+                                <input type="number" name="monto" min="500" max="1000000" step="0.01" placeholder="Mínimo $ 500" required></label>
+                            <div class="montos-rapidos" id="montos-rapidos">
+                                <button type="button" data-monto="5000">$ 5.000</button>
+                                <button type="button" data-monto="10000">$ 10.000</button>
+                                <button type="button" data-monto="50000">$ 50.000</button>
+                                <button type="button" data-monto="100000">$ 100.000</button>
+                            </div>
+                            <button type="submit" class="boton boton-grande" style="width:100%">Cargar saldo</button>
+                            <p class="pista">Proyecto escolar: el pago es simulado, no se cobra dinero real.</p>
+                            <p class="mensaje" id="mensaje-saldo"></p>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= MIS CARTAS / MAZOS ================= -->
+                <section id="cartas" class="seccion">
+                    <div id="estilos-cartas">
+                        <div id="mazos"><!-- 1 lateral izquierda, ocupa todo el largo del cuerpo pero menos de la mitad del ancho del cuerpo-->
+                            <div class="texto-titulo">MIS MAZOS</div>
+                            <!-- Formulario para crear un mazo nuevo -->
+                            <form id="form-mazo" class="form-linea">
+                                <input type="text" name="nombre" placeholder="Nombre del mazo nuevo" maxlength="60" required>
+                                <button type="submit" class="boton">Crear</button>
+                            </form>
+                            <p class="mensaje" id="mensaje-mazo"></p>
+                            <!-- Aca JavaScript dibuja un .coleccion-mazos por cada mazo -->
+                            <div class="contenido-caja" id="lista-mazos"></div>
+
+                        </div>
+                        <div id="detalles-mazo">
+                            <div class="texto-titulo">DETALLES DEL MAZO</div>
+                            <div class="contenido-caja" id="contenido-detalle"></div>
+
+                        </div>
+                        <div id="historial-cartas">
+                            <div class="texto-titulo titulo-con-boton">
+                                <span id="total-cartas">MI INVENTARIO</span>
+                                <button type="button" class="boton btn-publicar">+ Subir carta</button>
+                            </div>
+                            <!-- .box = contenedor, JavaScript agrega un .card-box por carta -->
+                            <div class="contenido-caja">
+                                <div class="box" id="lista-inventario"></div>
+                            </div>
+
+                        </div>
+                        <div id="cartas-sin-mazo">
+                            <div class="texto-titulo">CARTAS SIN MAZOS</div>
+                            <div class="contenido-caja">
+                                <div class="box box-columna" id="lista-sin-mazo"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+            <!-- ================= MERCADO ================= -->
+                <section id="mercado" class="seccion">
+                    <div class="mercado-cabecera">
+                        <div>
+                            <h2 class="titulo-seccion">Mercado</h2>
+                            <p class="subtitulo-seccion">Cartas publicadas por la comunidad. Precios en pesos argentinos.</p>
+                        </div>
+                        <button type="button" class="boton boton-grande btn-publicar">+ Publicar carta</button>
+                    </div>
+
+                    <!-- Filtros: cada cambio vuelve a pedir las publicaciones a PHP -->
+                    <form class="filtros" id="filtros">
+                        <input type="search" name="q" placeholder="Buscar por nombre o colección…">
+                        <select name="juego" id="filtro-juego">
+                            <option value="">Todos los juegos</option>
+                        </select>
+                        <select name="coleccion" id="filtro-coleccion">
+                            <option value="">Todas las colecciones</option>
+                        </select>
+                        <select name="estado" class="select-estado">
+                            <option value="">Cualquier estado</option>
+                        </select>
+                        <select name="orden">
+                            <option value="recientes">Más recientes</option>
+                            <option value="precio-asc">Menor precio</option>
+                            <option value="precio-desc">Mayor precio</option>
+                        </select>
+                        <input type="number" name="anio" min="1900" max="2100" placeholder="Año">
+                        <div class="precios">
+                            <input type="number" name="min" min="0" placeholder="$ mín.">
+                            <input type="number" name="max" min="0" placeholder="$ máx.">
+                        </div>
+                        <button type="reset" class="boton boton-secundario">Limpiar filtros</button>
+                    </form>
+
+                    <div class="resultados">
+                        <span id="texto-resultados"></span>
+                    </div>
+                    <!-- Visitante: solo ve algunas -->
+                    <div class="aviso solo-visitante" id="aviso-limitado" hidden>
+                        <span id="texto-limitado">Iniciá sesión para ver todas las publicaciones.</span>
+                        <a class="boton" href="paginas/sesion.html">Iniciar sesión</a>
+                    </div>
+                    <div class="box" id="lista-mercado"></div>
+                </section>
+
+            <!-- ================= HISTORIAL ================= -->
+                <section id="historial" class="seccion">
+                    <h2 class="titulo-seccion">Historial de transacciones</h2>
+                    <p class="subtitulo-seccion">Revisá todas tus compras, ventas y cargas de saldo en un solo lugar.</p>
+
+                    <div class="resumen">
+                        <div class="dato"><strong id="total-gastado">$ 0</strong>gastado en compras</div>
+                        <div class="dato"><strong id="total-ganado">$ 0</strong>cobrado por ventas</div>
+                        <div class="dato"><strong id="total-cargado">$ 0</strong>saldo cargado</div>
+                    </div>
+
+                    <div class="pestanas" id="pestanas-historial">
+                        <button type="button" class="pestana activa" data-tipo="">Todas</button>
+                        <button type="button" class="pestana" data-tipo="compra">Compras</button>
+                        <button type="button" class="pestana" data-tipo="venta">Ventas</button>
+                        <button type="button" class="pestana" data-tipo="recarga">Cargas de saldo</button>
+                    </div>
+                    <div class="caja-oscura">
+                        <ul class="lista-movimientos" id="lista-historial"></ul>
+                    </div>
+                </section>
+
+        </div>
+        <footer id="pie">
+            <a href="paginas/sobre-nosotros.html">Sobre nosotros</a>
+            <a href="#historial" class="solo-cliente">Historial de transacciones</a>
+            <a href="paginas/sesion.html" class="solo-visitante">Iniciar sesión</a>
+        </footer>
+    </div>
+
+    <!-- ================= VENTANA: DETALLE DE UNA CARTA ================= -->
+    <dialog id="modal-carta" class="modal">
+        <button type="button" class="cerrar-modal" aria-label="Cerrar">×</button>
+        <div class="detalle-carta">
+            <div class="foto-grande" id="detalle-foto"></div>
+            <div>
+                <h2 id="detalle-nombre"></h2>
+                <p class="pista" id="detalle-coleccion"></p>
+                <div class="etiquetas" id="detalle-etiquetas"></div>
+                <div class="ficha">
+                    <div><small>Estado</small><span id="detalle-estado"></span></div>
+                    <div><small>Año</small><span id="detalle-anio"></span></div>
+                    <div><small>Medidas</small><span id="detalle-medidas"></span></div>
+                    <div><small>Peso</small><span id="detalle-peso"></span></div>
+                </div>
+                <p id="detalle-descripcion"></p>
+                <p class="pista" id="detalle-vendedor"></p>
+                <div class="precio-grande" id="detalle-precio"></div>
+
+                <!-- Las acciones cambian segun quien mira la carta (las arma app.js) -->
+                <div id="detalle-acciones"></div>
+                <p class="mensaje" id="detalle-mensaje"></p>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- ================= VENTANA: PUBLICAR / SUBIR CARTA ================= -->
+    <dialog id="modal-publicar" class="modal">
+        <button type="button" class="cerrar-modal" aria-label="Cerrar">×</button>
+        <h2>Publicar carta</h2>
+        <p class="pista">Los campos con <span class="obligatorio">*</span> son obligatorios.</p>
+
+        <!-- enctype multipart: el formulario lleva un archivo (la foto) -->
+        <form id="form-publicar" enctype="multipart/form-data">
+            <div class="publicar">
+                <div class="selector-foto">
+                    <label class="foto-grande" id="vista-foto" for="input-foto">Tocá para elegir una foto <span class="obligatorio">*</span></label>
+                    <input type="file" id="input-foto" name="foto" accept="image/jpeg,image/png,image/webp" required>
+                    <p class="pista">JPG, PNG o WEBP, hasta 3 MB.</p>
+                </div>
+
+                <div class="grilla-campos">
+                    <label class="campo ancho-total"><span>Nombre de la carta <span class="obligatorio">*</span></span>
+                        <input type="text" name="nombre" maxlength="100" required placeholder="Ej: Dragón Blanco de Ojos Azules"></label>
+                    <label class="campo"><span>Colección <span class="obligatorio">*</span></span>
+                        <select name="coleccion_id" id="select-coleccion" required></select></label>
+                    <label class="campo"><span>Estado <span class="obligatorio">*</span></span>
+                        <select name="estado" class="select-estado" required></select></label>
+                    <label class="campo" data-nueva-coleccion hidden><span>Juego <span class="obligatorio">*</span></span>
+                        <input type="text" name="nuevo_juego" maxlength="50" placeholder="Ej: Dragon Ball"></label>
+                    <label class="campo" data-nueva-coleccion hidden><span>Nombre de la colección <span class="obligatorio">*</span></span>
+                        <input type="text" name="nueva_coleccion" maxlength="100" placeholder="Ej: Super Card Game"></label>
+                    <label class="campo"><span>Año de lanzamiento <span class="obligatorio">*</span></span>
+                        <input type="number" name="anio" min="1900" max="2100" required placeholder="2002"></label>
+                    <label class="campo"><span>Medidas <span class="obligatorio">*</span></span>
+                        <input type="text" name="medidas" maxlength="30" required placeholder="5,9 x 8,6 cm"></label>
+                    <label class="campo"><span>Peso <span class="obligatorio">*</span></span>
+                        <input type="text" name="peso" maxlength="20" required placeholder="2 g"></label>
+                    <label class="campo ancho-total"><span>Descripción (opcional)</span>
+                        <textarea name="descripcion" maxlength="500" placeholder="Contá detalles: marcas, si estuvo en funda…"></textarea></label>
+                    <label class="check ancho-total"><input type="checkbox" name="publicar" value="1" id="check-publicar" checked> Publicar a la venta en el Mercado</label>
+                    <label class="campo" id="campo-precio"><span>Precio en pesos <span class="obligatorio">*</span></span>
+                        <input type="number" name="precio" id="input-precio" min="1" step="0.01" placeholder="15000"></label>
+                </div>
+
+                <div class="resumen-publicacion caja-oscura">
+                    <strong>Resumen</strong>
+                    <div class="fila"><span>Precio de venta</span><span id="resumen-precio">$ 0,00</span></div>
+                    <div class="fila"><span>Comisión (5%)</span><span id="resumen-comision">$ 0,00</span></div>
+                    <div class="total-recibir">Total a recibir<strong id="resumen-total">$ 0,00</strong></div>
+                    <strong>Tips para vender mejor</strong>
+                    <ul class="tips">
+                        <li>Fotos claras y con buena luz.</li>
+                        <li>Sé preciso con el estado.</li>
+                        <li>Completá todos los datos.</li>
+                        <li>Un buen precio atrae compradores.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="detalle-acciones" style="justify-content:flex-end">
+                <button type="button" class="boton boton-secundario cerrar-form">Cancelar</button>
+                <button type="submit" class="boton boton-grande" id="btn-enviar-publicar">Publicar carta</button>
+            </div>
+            <p class="mensaje" id="mensaje-publicar"></p>
+        </form>
+    </dialog>
+
+    <!-- Aviso que aparece abajo unos segundos ("Compraste…") -->
+    <div class="toast" id="toast" role="status"></div>
+
+
+    <script src="js/funciones.js" defer></script>
+    <script src="js/app.js" defer></script>
+</body>
+</html>

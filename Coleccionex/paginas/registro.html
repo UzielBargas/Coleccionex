@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse - Coleccionex</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/sesion.css">
+</head>
+<body>
+    <header class="encabezado">
+        <a href="../index.html">
+            <img src="../imagenes/imagen_logo.jpg" alt="Logo de Coleccionex" class="logo">
+        </a>
+    </header>
+
+    <main class="contenido">
+        <section class="caja-login">
+            <h1>Crear cuenta</h1>
+            <p>Registra tu cuenta de Coleccionex</p>
+
+            <form id="form-registro">
+                <label for="usuario">Usuario</label>
+                <input type="text" id="usuario" name="usuario" placeholder="Escribe tu usuario" required maxlength="50" autocomplete="username">
+
+                <label for="correo">Correo electronico</label>
+                <input type="email" id="correo" name="correo" placeholder="Escribe tu correo" required autocomplete="email">
+
+                <label for="contrasena">Contraseña (mínimo 8 caracteres)</label>
+                <input type="password" id="contrasena" name="contrasena" placeholder="Crea una contraseña" required minlength="8" autocomplete="new-password">
+
+                <label for="confirmar-contrasena">Confirmar contraseña</label>
+                <input type="password" id="confirmar-contrasena" name="confirmar-contrasena" placeholder="Repite tu contraseña" required minlength="8" autocomplete="new-password">
+
+                <button type="submit">Registrarme</button>
+                <p class="mensaje" id="mensaje"></p>
+            </form>
+
+            <p class="registro">¿Ya tienes una cuenta? <a href="sesion.html">Inicia sesión</a></p>
+        </section>
+    </main>
+    <script src="../js/registro.js" defer></script>
+</body>
+</html>

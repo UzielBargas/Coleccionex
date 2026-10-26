@@ -1,0 +1,190 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: rgb(24, 42, 62);
+    background-image: url(../imagenes/imagen-fondo-seccionCUERPO2.jpg);
+    background-size: cover;
+    background-position: center;
+    color: white;
+    font-family: Arial, sans-serif; /* misma fuente de texto que Estilos.css */
+}
+
+.encabezado {
+    height: 90px;
+    padding: 15px 30px;
+    background-color: rgb(24, 42, 62);
+}
+
+.logo {
+    width: 190px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.contenido {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 90px);
+    padding: 30px 15px;
+    background-color: rgba(10, 20, 32, 0.55);
+}
+
+.caja-informacion {
+    width: 100%;
+    max-width: 600px;
+    padding: 35px;
+    background-color: rgba(24, 42, 62, 0.95);
+    border: 2px solid rgb(230, 126, 34);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+h1 {
+    font-family: "Rajdhani", Arial, sans-serif; /* misma fuente de titulos que Estilos.css */
+    margin-top: 0;
+    color: rgb(255, 166, 60);
+}
+
+p {
+    line-height: 1.5;
+}
+
+.volver {
+    font-family: "Rajdhani", Arial, sans-serif;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 15px;
+    border-radius: 4px;
+    background-color: rgb(230, 126, 34);
+    color: white;
+    text-decoration: none;
+}
+
+.volver:hover {
+    background-color: rgb(194, 92, 18);
+}
+/* Caja mas ancha para el historial y "sobre nosotros" */
+.caja-ancha {
+    max-width: 900px;
+}
+
+h2 {
+    margin: 28px 0 12px;
+    font-family: "Rajdhani", Arial, sans-serif;
+    color: rgb(255, 166, 60);
+}
+
+/* Tres tarjetitas de "¿Qué podés hacer?" */
+.tarjetas-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    text-align: left;
+}
+
+.tarjetas-info article {
+    padding: 14px;
+    border-radius: 8px;
+    background-color: rgb(38, 62, 86);
+}
+
+.tarjetas-info h3 {
+    margin: 0 0 6px;
+    font-family: "Rajdhani", Arial, sans-serif;
+}
+
+.tarjetas-info p {
+    margin: 0;
+    font-size: 14px;
+    color: rgb(220, 220, 220);
+}
+
+/* Lista de rarezas con su color (los mismos que el borde de las cartas) */
+.rarezas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 18px;
+    padding: 0;
+    list-style: none;
+}
+
+.rarezas li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.punto {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+}
+
+/* Los mismos colores que el marco de las cartas de cada juego */
+.punto.yugioh { background-color: #8a5418; }
+.punto.pokemon { background-color: #a16207; }
+.punto.magic { background-color: #5b3a8c; }
+.punto.futbol { background-color: #166534; }
+
+/* ===== Historial ===== */
+.resumen {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.resumen div {
+    padding: 12px;
+    border-radius: 6px;
+    background-color: rgb(38, 62, 86);
+    font-size: 14px;
+}
+
+.resumen strong {
+    display: block;
+    font-family: "Rajdhani", Arial, sans-serif;
+    font-size: 28px;
+    color: rgb(255, 166, 60);
+}
+
+.tabla-contenedor {
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 14px;
+}
+
+.tabla th {
+    position: sticky;
+    top: 0;
+    padding: 10px;
+    background-color: rgb(38, 62, 86);
+    font-family: "Rajdhani", Arial, sans-serif;
+    font-size: 16px;
+}
+
+.tabla td {
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.negativo { color: #f87171; font-weight: bold; }
+.positivo { color: #4ade80; font-weight: bold; }
+
+.mensaje-historial a {
+    color: rgb(255, 166, 60);
+}

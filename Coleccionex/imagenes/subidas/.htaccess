@@ -1,0 +1,6 @@
+# Carpeta donde se guardan las fotos que suben los usuarios.
+# Por seguridad, Apache NO ejecuta archivos PHP desde acá (aunque alguien logre subir uno).
+<FilesMatch "\.(php|phtml|php[0-9])$">
+    Require all denied
+</FilesMatch>
+Options -Indexes
