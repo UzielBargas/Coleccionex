@@ -1020,11 +1020,242 @@ document.getElementById("pestanas-historial").addEventListener("click", (evento)
 });
 
 
+// ================= PANEL DE ADMINISTRADOR =================
+// Solo se usa si la cuenta tiene rol = "admin". PHP vuelve a controlarlo en cada pedido (requiere_admin.php).
+const modalUsuario = document.getElementById("modal-usuario");
+let filtroReportes = "pendiente";   // pestaña elegida en la bandeja
+let usuarioInspeccionado = null;    // id del usuario abierto en la ventana "Inspeccionar"
+
+function esAdmin() {
+    return usuario !== null && usuario.rol === "admin";
+}
+
+async function cargarAdmin() {
+    await Promise.all([cargarReportes(), cargarUsuariosAdmin()]);
+}
+
+// ---- Bandeja de reportes ----
+async function cargarReportes() {
+    const lista = document.getElementById("lista-reportes");
+    try {
+        const datos = await pedir("api/admin_reportes.php?estado=" + filtroReportes);
+        document.getElementById("admin-pendientes").textContent = datos.resumen.pendientes;
+        document.getElementById("admin-revisados").textContent = datos.resumen.revisados;
+        document.getElementById("admin-baneados").textContent = datos.resumen.baneados;
+        document.getElementById("admin-clientes").textContent = datos.resumen.clientes;
+
+        if (datos.reportes.length === 0) {
+            mostrarMensaje(lista, filtroReportes === "pendiente"
+                ? "No hay reportes pendientes. ¡Todo en orden!"
+                : "No hay reportes acá.");
+            return;
+        }
+        lista.replaceChildren(...datos.reportes.map(crearReporte));
+    } catch (error) {
+        console.error(error);
+        mostrarMensaje(lista, "No se pudieron cargar los reportes.");
+    }
+}
+
+function crearReporte(reporte) {
+    const caja = crear("article", "reporte" + (reporte.estado === "revisado" ? " revisado" : ""));
+
+    const miniatura = crear("div", "miniatura");
+    ponerFoto(miniatura, { foto: reporte.foto, nombre: reporte.carta || "?" });
+
+    const cuerpo = crear("div");
+    const cabecera = crear("div", "reporte-cabecera");
+    cabecera.append(
+        crear("span", "reporte-motivo", reporte.motivo),
+        crear("span", "chip chip-" + reporte.estado, reporte.estado === "pendiente" ? "Pendiente" : "Revisado"),
+    );
+
+    const quien = crear("small", "pista",
+        "@" + reporte.denunciante + " reportó a @" + reporte.denunciado + " · " + formatearFecha(reporte.fecha) +
+        (Number(reporte.reportes_del_usuario) > 1 ? " · " + reporte.reportes_del_usuario + " reportes en total" : ""));
+
+    const carta = crear("small", "pista", reporte.carta
+        ? "Carta: " + reporte.carta + " (" + reporte.estado_carta + ")" + (reporte.precio ? " · " + pesos(reporte.precio) : "")
+        : "Sin carta asociada");
+
+    cuerpo.append(cabecera, quien, crear("p", "", "“" + reporte.descripcion + "”"), carta);
+
+    if (Number(reporte.denunciado_baneado) === 1) {
+        cuerpo.appendChild(crear("span", "chip chip-baneado", "@" + reporte.denunciado + " está baneado"));
+    }
+
+    const acciones = crear("div", "detalle-acciones");
+    acciones.appendChild(crearBoton("Inspeccionar a @" + reporte.denunciado, () => inspeccionarUsuario(reporte.denunciado_id)));
+    if (reporte.estado === "pendiente") {
+        acciones.appendChild(crearBoton("Marcar como revisado", () => resolverReporte(reporte.id, "revisado"), ["boton-secundario"]));
+    } else {
+        acciones.appendChild(crearBoton("Reabrir", () => resolverReporte(reporte.id, "pendiente"), ["boton-secundario"]));
+    }
+    cuerpo.appendChild(acciones);
+
+    caja.append(miniatura, cuerpo);
+    return caja;
+}
+
+async function resolverReporte(id, estado) {
+    try {
+        const datos = await enviar("api/admin_resolver.php", { id: id, estado: estado });
+        avisar(datos.mensaje);
+        await cargarReportes();
+    } catch (error) {
+        avisar(error.message, true);
+    }
+}
+
+document.getElementById("pestanas-reportes").addEventListener("click", (evento) => {
+    const pestana = evento.target.closest(".pestana");
+    if (!pestana) return;
+    filtroReportes = pestana.dataset.estado;
+    document.querySelectorAll("#pestanas-reportes .pestana").forEach((p) => p.classList.toggle("activa", p === pestana));
+    cargarReportes();
+});
+
+// ---- Lista de usuarios ----
+async function cargarUsuariosAdmin() {
+    const lista = document.getElementById("lista-usuarios");
+    const texto = document.getElementById("buscador-usuarios").q.value.trim();
+    try {
+        const usuarios = await pedir("api/admin_usuarios.php?q=" + encodeURIComponent(texto));
+        if (usuarios.length === 0) {
+            mostrarMensaje(lista, "No se encontraron usuarios.");
+            return;
+        }
+        lista.replaceChildren(...usuarios.map((u) => {
+            const fila = crear("li", "fila-usuario");
+            const avatar = crear("div", "avatar-chico", (u.nombre || u.usuario).charAt(0).toUpperCase());
+
+            const textos = crear("div");
+            textos.appendChild(crear("div", "", "@" + u.usuario + ((u.nombre + " " + u.apellido).trim() ? " · " + (u.nombre + " " + u.apellido).trim() : "")));
+            textos.appendChild(crear("small", "", u.cartas + " cartas · " + u.movimientos + " movimientos · " + u.reportes + " reportes"));
+
+            const estado = crear("div", "etiquetas");
+            if (u.rol === "admin") estado.appendChild(crear("span", "chip chip-admin", "Admin"));
+            if (Number(u.baneado) === 1) estado.appendChild(crear("span", "chip chip-baneado", "Baneado"));
+
+            fila.append(avatar, textos, estado);
+            fila.addEventListener("click", () => inspeccionarUsuario(u.id));
+            return fila;
+        }));
+    } catch (error) {
+        console.error(error);
+        mostrarMensaje(lista, "No se pudieron cargar los usuarios.");
+    }
+}
+
+let esperaUsuarios = null;
+document.getElementById("buscador-usuarios").addEventListener("input", () => {
+    clearTimeout(esperaUsuarios);
+    esperaUsuarios = setTimeout(cargarUsuariosAdmin, 350);
+});
+document.getElementById("buscador-usuarios").addEventListener("submit", (evento) => evento.preventDefault());
+
+// ---- Ventana "Inspeccionar usuario" ----
+async function inspeccionarUsuario(id) {
+    usuarioInspeccionado = id;
+    try {
+        const datos = await pedir("api/admin_usuario.php?id=" + id);
+        dibujarInspeccion(datos);
+        if (!modalUsuario.open) {
+            modalUsuario.showModal();
+        }
+    } catch (error) {
+        avisar(error.message, true);
+    }
+}
+
+function dibujarInspeccion(datos) {
+    const nombreCompleto = (datos.nombre + " " + datos.apellido).trim();
+    document.getElementById("inspeccion-avatar").textContent = (datos.nombre || datos.usuario).charAt(0).toUpperCase();
+    document.getElementById("inspeccion-nombre").textContent = nombreCompleto || datos.usuario;
+    document.getElementById("inspeccion-datos").textContent =
+        "@" + datos.usuario + " · " + datos.correo + (datos.telefono ? " · Tel. " + datos.telefono : "") +
+        " · registrado el " + new Date(datos.creado_en.replace(" ", "T")).toLocaleDateString("es-AR");
+
+    const etiquetas = document.getElementById("inspeccion-etiquetas");
+    etiquetas.replaceChildren();
+    if (datos.rol === "admin") etiquetas.appendChild(crear("span", "chip chip-admin", "Administrador"));
+    etiquetas.appendChild(Number(datos.baneado) === 1
+        ? crear("span", "chip chip-baneado", "Cuenta baneada")
+        : crear("span", "chip chip-revisado", "Cuenta activa"));
+
+    // Boton banear / desbanear (no aparece para administradores)
+    const acciones = document.getElementById("inspeccion-acciones");
+    acciones.replaceChildren();
+    if (datos.rol !== "admin") {
+        acciones.appendChild(Number(datos.baneado) === 1
+            ? crearBoton("Quitar baneo", () => cambiarBaneo(datos, "desbanear"), ["boton-exito"])
+            : crearBoton("Banear cuenta", () => cambiarBaneo(datos, "banear"), ["boton-peligro"]));
+    }
+
+    // Numeros
+    const suma = (tipo) => datos.historial.filter((m) => m.tipo === tipo).length;
+    const numeros = document.getElementById("inspeccion-numeros");
+    numeros.replaceChildren();
+    [[pesos(datos.saldo), "saldo"], [datos.cartas.length, "cartas"], [suma("compra"), "compras"], [suma("venta"), "ventas"]]
+        .forEach(([valor, texto]) => {
+            const dato = crear("div", "dato");
+            dato.append(crear("strong", "", valor), texto);
+            numeros.appendChild(dato);
+        });
+
+    // Reportes recibidos
+    const reportes = document.getElementById("inspeccion-reportes");
+    if (datos.reportes.length === 0) {
+        mostrarMensaje(reportes, "No recibió reportes.");
+    } else {
+        reportes.replaceChildren(...datos.reportes.map((r) => {
+            const item = crear("li");
+            item.append(crear("strong", "", r.motivo + " "), crear("span", "chip chip-" + r.estado, r.estado));
+            item.appendChild(crear("div", "", "“" + r.descripcion + "”"));
+            item.appendChild(crear("small", "", "De @" + r.denunciante + " · " + formatearFecha(r.fecha)));
+            return item;
+        }));
+    }
+
+    // Historial reciente (mismo formato que "Historial")
+    const historialLista = document.getElementById("inspeccion-historial");
+    if (datos.historial.length === 0) {
+        mostrarMensaje(historialLista, "Sin movimientos.");
+    } else {
+        historialLista.replaceChildren(...datos.historial.map(crearMovimiento));
+    }
+
+    // Cartas (al tocarlas se abre su detalle)
+    const cartas = document.getElementById("inspeccion-cartas");
+    if (datos.cartas.length === 0) {
+        mostrarMensaje(cartas, "No tiene cartas.");
+    } else {
+        cartas.replaceChildren(...datos.cartas.map((carta) => crearCarta(carta, { enInventario: true })));
+    }
+}
+
+async function cambiarBaneo(datos, accion) {
+    const pregunta = accion === "banear"
+        ? "¿Banear a @" + datos.usuario + "? No va a poder iniciar sesión y sus cartas salen del Mercado."
+        : "¿Quitar el baneo a @" + datos.usuario + "?";
+    if (!confirm(pregunta)) {
+        return;
+    }
+    try {
+        const respuesta = await enviar("api/admin_banear.php", { id: datos.id, accion: accion });
+        avisar(respuesta.mensaje);
+        await Promise.all([inspeccionarUsuario(datos.id), cargarAdmin(), cargarMercado(), cargarUltimas()]);
+    } catch (error) {
+        avisar(error.message, true);
+    }
+}
+
+
 // ================= VENTANAS: cerrar con la X o tocando afuera =================
 document.querySelectorAll(".cerrar-modal").forEach((boton) => {
     boton.addEventListener("click", () => boton.closest("dialog").close());
 });
-[modalCarta, modalPublicar].forEach((modal) => {
+[modalCarta, modalPublicar, modalUsuario].forEach((modal) => {
     modal.addEventListener("click", (evento) => {
         if (evento.target === modal) modal.close();
     });
@@ -1052,6 +1283,9 @@ async function recargarTodo() {
     const pedidos = [cargarColecciones(), cargarUltimas(), cargarMercado()];
     if (usuario) {
         pedidos.push(recargarSesion(), cargarInventario(), cargarMazos(), cargarHistorial());
+    }
+    if (esAdmin()) {
+        pedidos.push(cargarAdmin());
     }
     await Promise.all(pedidos);
     if (usuario) {
@@ -1084,6 +1318,10 @@ async function iniciar() {
     try {
         await recargarSesion();
         document.body.className = usuario ? "cliente" : "visitante";
+        if (esAdmin()) {
+            document.body.classList.add("admin");
+            document.querySelector("#texto-panel .solo-cliente").firstChild.textContent = "PANEL DE ADMINISTRADOR - BIENVENIDO ";
+        }
         await recargarTodo();
 
         // index.html#mercado abre directamente esa seccion

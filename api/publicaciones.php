@@ -15,7 +15,7 @@ session_start();
 $logueado = isset($_SESSION["usuario_id"]);
 
 // Armamos el WHERE de a partes, según los filtros que llegaron
-$condiciones = ["c.en_venta = 1"];
+$condiciones = ["c.en_venta = 1", "u.baneado = 0"];   // nunca se muestran cartas de cuentas baneadas
 $parametros = [];
 
 $texto = trim($_GET["q"] ?? "");

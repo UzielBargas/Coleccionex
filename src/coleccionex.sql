@@ -126,6 +126,12 @@ INSERT INTO usuarios (id, usuario, correo, password_hash, nombre, apellido, tele
     (2, 'ColeccionistaX', 'coleccionistax@coleccionex.test', '$2y$10$sU.GKWpIPsm5FFPmcKiSL.G9XA1lvyqpApvCDg1z8hXnNctnmUceK',
         'Tomás', 'Godoy', '299 455-7788', 'Figuritas de fútbol y cartas de Magic. Todo en funda desde el primer día.', 120000);
 
+-- Cuenta de ADMINISTRADOR (rol = 'admin'). Usuario: admin  /  Contraseña: admin1234
+-- Desde la pestaña "Administración" revisa reportes, inspecciona usuarios y banea.
+INSERT INTO usuarios (id, usuario, correo, password_hash, nombre, apellido, telefono, rol) VALUES
+    (3, 'admin', 'admin@coleccionex.test', '$2y$10$NC4nOqoLwQDcawjFRWQp1eKVd9fr8eOg7zOcv8skYRqvJiaDKBGb6',
+        'Administrador', 'Coleccionex', '299 000-0000', 'admin');
+
 INSERT INTO colecciones (id, juego, nombre) VALUES
     (1, 'Yu-Gi-Oh!', 'Legend of Blue Eyes'),
     (2, 'Yu-Gi-Oh!', 'Metal Raiders'),
@@ -153,5 +159,32 @@ INSERT INTO cartas (usuario_id, coleccion_id, nombre, estado, anio, medidas, pes
     (1, 6, 'Julián Álvarez', 'Casi nuevo', 2022, '5,0 x 7,0 cm', '1 g', 'Un mínimo detalle en el borde.', 7000, 1),
     (2, 7, 'Escudo de River Plate', 'Nuevo', 2024, '5,0 x 7,0 cm', '1 g', 'Figurita brillante del escudo.', 4500, 1),
     (1, 7, 'Escudo de Boca Juniors', 'Nuevo', 2024, '5,0 x 7,0 cm', '1 g', 'Figurita brillante del escudo.', 4500, 1);
+
+-- Fotos de ejemplo (ilustraciones genéricas que vienen en imagenes/cartas/)
+UPDATE cartas SET foto = 'imagenes/cartas/dragon-blanco.jpg' WHERE nombre = 'Dragón Blanco de Ojos Azules';
+UPDATE cartas SET foto = 'imagenes/cartas/mago-oscuro.jpg' WHERE nombre = 'Mago Oscuro';
+UPDATE cartas SET foto = 'imagenes/cartas/exodia.jpg' WHERE nombre = 'Exodia la Prohibida';
+UPDATE cartas SET foto = 'imagenes/cartas/dragon-negro.jpg' WHERE nombre = 'Dragón Negro de Ojos Rojos';
+UPDATE cartas SET foto = 'imagenes/cartas/charizard.jpg' WHERE nombre = 'Charizard Holográfico';
+UPDATE cartas SET foto = 'imagenes/cartas/pikachu.jpg' WHERE nombre = 'Pikachu';
+UPDATE cartas SET foto = 'imagenes/cartas/blastoise.jpg' WHERE nombre = 'Blastoise Holográfico';
+UPDATE cartas SET foto = 'imagenes/cartas/mewtwo.jpg' WHERE nombre = 'Mewtwo ex';
+UPDATE cartas SET foto = 'imagenes/cartas/bulbasaur.jpg' WHERE nombre = 'Bulbasaur';
+UPDATE cartas SET foto = 'imagenes/cartas/sheoldred.jpg' WHERE nombre = 'Sheoldred, la Apocalipsis';
+UPDATE cartas SET foto = 'imagenes/cartas/liliana.jpg' WHERE nombre = 'Liliana del Velo Oscuro';
+UPDATE cartas SET foto = 'imagenes/cartas/messi.jpg' WHERE nombre = 'Lionel Messi';
+UPDATE cartas SET foto = 'imagenes/cartas/dibu.jpg' WHERE nombre = 'Emiliano "Dibu" Martínez';
+UPDATE cartas SET foto = 'imagenes/cartas/julian.jpg' WHERE nombre = 'Julián Álvarez';
+UPDATE cartas SET foto = 'imagenes/cartas/river.jpg' WHERE nombre = 'Escudo de River Plate';
+UPDATE cartas SET foto = 'imagenes/cartas/boca.jpg' WHERE nombre = 'Escudo de Boca Juniors';
+
+-- Movimientos de ejemplo (cargas de saldo de los vendedores de prueba)
+INSERT INTO transacciones (usuario_id, tipo, monto, metodo) VALUES
+    (1, 'recarga', 85000, 'Mercado Pago'),
+    (2, 'recarga', 120000, 'Ualá');
+
+-- Un reporte de ejemplo, para que el panel de administrador no arranque vacío
+INSERT INTO reportes (denunciante_id, denunciado_id, carta_id, motivo, descripcion) VALUES
+    (2, 1, 5, 'Precio abusivo', 'El Charizard tiene una raya en el reverso y lo publica al triple de lo que vale en otras tiendas.');
 
 -- Nota: los usuarios nuevos se crean desde paginas/registro.html (no a mano en phpMyAdmin).

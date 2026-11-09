@@ -1422,3 +1422,135 @@ a.boton{
         grid-template-columns: 1fr;
     }
 }
+
+
+
+/* ================= PANEL DE ADMINISTRADOR ================= */
+/* El boton "Administracion" solo aparece si el body tiene la clase "admin" */
+body:not(.admin) .solo-admin{
+    display: none !important;
+}
+.admin-resumen{
+    margin: 0 0 6px;
+}
+.admin-grilla{
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 20px;
+    align-items: start;
+}
+.buscador-chico{
+    margin: 0 0 12px;
+}
+.buscador-chico input{
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+/* Cada reporte de la bandeja */
+.reporte{
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 14px;
+    margin-bottom: 12px;
+    padding: 14px;
+    border: 1px solid #ffffff1a;
+    border-left: 5px solid var(--naranja);
+    border-radius: 10px;
+    background-color: rgba(24, 42, 62, 0.95);
+}
+.reporte.revisado{
+    border-left-color: #16a34a;
+    opacity: 0.85;
+}
+.reporte .miniatura{
+    width: 60px;
+}
+.reporte-cabecera{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+.reporte-motivo{
+    font-family: var(--fuente-titulos);
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(255, 166, 60);
+}
+.reporte p{
+    margin: 6px 0;
+    color: #e2e8f0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+.reporte .detalle-acciones{
+    margin-top: 8px;
+}
+.reporte .detalle-acciones .boton{
+    padding: 7px 12px;
+    font-size: 13px;
+}
+.chip-pendiente{  color: rgb(255, 166, 60); border: 1px solid rgb(255, 166, 60); }
+.chip-revisado{   color: #4ade80; border: 1px solid #4ade80; }
+.chip-baneado{    color: #f87171; border: 1px solid #f87171; }
+.chip-admin{      color: #c4b5fd; border: 1px solid #c4b5fd; }
+
+/* Lista de usuarios */
+.lista-usuarios,
+.lista-reportes-chica{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.fila-usuario{
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 6px;
+    border-bottom: 1px solid #ffffff1a;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.fila-usuario:hover{
+    background-color: #ffffff12;
+}
+.fila-usuario small{
+    display: block;
+    color: #94a3b8;
+}
+.avatar-chico{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--naranja);
+    border-radius: 50%;
+    font-family: var(--fuente-titulos);
+    font-weight: bold;
+}
+.lista-reportes-chica li{
+    padding: 8px 0;
+    border-bottom: 1px solid #ffffff1a;
+    font-size: 14px;
+}
+.lista-reportes-chica small{
+    color: #94a3b8;
+}
+#modal-usuario .perfil-datos{
+    margin-bottom: 4px;
+}
+@media (max-width: 1000px){
+    .admin-grilla{
+        grid-template-columns: 1fr;
+    }
+}
+.boton-exito{
+    background-color: #16a34a;
+}
+.boton-exito:hover{
+    background-color: #166534;
+}

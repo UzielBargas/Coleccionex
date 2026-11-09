@@ -2,7 +2,7 @@ const botones = document.querySelectorAll('.nav-btn');
 const secciones = document.querySelectorAll('.seccion');
 
 // Secciones que solo puede ver alguien con sesion iniciada
-const SECCIONES_PRIVADAS = ['perfil', 'cartas', 'historial'];
+const SECCIONES_PRIVADAS = ['perfil', 'cartas', 'historial', 'admin'];
 
 
 // Muestra una seccion (inicio, perfil, cartas, mercado o historial) y marca su boton del menu
